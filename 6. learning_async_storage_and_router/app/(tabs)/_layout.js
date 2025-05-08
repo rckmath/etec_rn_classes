@@ -5,8 +5,6 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { UserProvider } from "../contexts/user.context";
 
 export default function TabLayout() {
-  console.log("Entrou");
-
   return (
     <UserProvider>
       <Tabs initialRouteName="index">
