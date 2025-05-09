@@ -3,29 +3,21 @@ import { SafeAreaView, View, Text, StyleSheet } from "react-native";
 
 import TopBar from "../components/TopBar";
 import InfoDaConta from "../components/InfoDaConta";
-import NubankButton from "../components/NubankButton";
 
 import { UserContext } from "../contexts/user.context";
 
 const HomeScreen = () => {
-  const { user, setUser, saldo, setSaldo } = useContext(UserContext);
-
-  const handleLogin = () => {
-    setUser({ name: "Erick" });
-    setSaldo(-0.67);
-  };
+  const { user, saldo } = useContext(UserContext);
 
   return (
     <SafeAreaView style={styles.container}>
       <TopBar />
       <View style={{ padding: 20, gap: 15 }}>
-        {!user.name && <NubankButton title="Efetuar login" onPress={handleLogin} />}
-
         <View style={styles.cardContainer}>
           <Text style={styles.helloWorldTitle}>Olá, {user?.name || "usuário"}</Text>
           <View style={styles.saldoContainer}>
             <Text style={styles.saldoCurrency}>R$</Text>
-            <Text style={[styles.saldoDescription, { color: saldo < 0 ? "#e74c3c" : "#0009" }]}>{saldo.toLocaleString("pt-BR")}</Text>
+            <Text style={[styles.saldoDescription, { color: saldo < 0 ? "#e74c3c" : "#0009" }]}>{Number(saldo).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Text>
           </View>
         </View>
         <InfoDaConta saldo={saldo} />
