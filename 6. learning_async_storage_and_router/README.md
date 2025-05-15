@@ -7,7 +7,7 @@ Este projeto demonstra como utilizar o Context API do React para gerenciar estad
 - **Expo Router:** Navegação baseada em arquivos, com estrutura de rotas por pastas e arquivos (`app/(tabs)/home.js`, etc.).
 - **Componentização:** Separação de responsabilidades em componentes como `TopBar`, `InfoDaConta`, `ConfirmaEmprestimo` e `NubankButton`.
 - **Hooks:** Uso de `useContext` e `useState` para manipulação de estado.
-- **AsyncStorage:** (Se implementado) Persistência de dados localmente no dispositivo.
+- **AsyncStorage:** Persistência de dados localmente no dispositivo; nos garantirá permanecermos logado mesmo após fechar e reabrir o app.
 - **UI Dinâmica:** Exemplo: a cor do saldo muda para vermelho se for negativo e verde se for positivo.
 
 ## Como funciona

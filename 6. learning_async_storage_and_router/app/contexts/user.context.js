@@ -1,4 +1,7 @@
 import React, { createContext, useState } from "react";
+import { router } from "expo-router";
+
+import { saveLoggedUserInfo, destroyUserInfo } from "../storage/user.storage";
 
 export const usuariosCadastrados = [
   {
@@ -30,6 +33,7 @@ export const UserContext = createContext({
   saldo: 0,
   realizarLogin: (cpf, password) => {},
   realizarEmprestimo: () => {},
+  realizarLogout: () => {},
 });
 
 const UserProvider = ({ children }) => {
@@ -41,6 +45,12 @@ const UserProvider = ({ children }) => {
     emprestimo: false,
   });
 
+  const realizarLogout = async () => {
+    await destroyUserInfo();
+    setUser({ name: "", email: "", emprestimo: false });
+    router.push("/");
+  };
+
   const realizarLogin = (cpf, password) => {
     if (!cpf || !password) {
       throw new Error("CPF e senha são obrigatórios");
@@ -50,6 +60,7 @@ const UserProvider = ({ children }) => {
 
     if (user) {
       const saldoEmReais = user.saldo ? user.saldo / 1000 : 0;
+      saveLoggedUserInfo({ value: user });
       setUser(user);
       setSaldo(saldoEmReais);
     } else {
@@ -62,7 +73,7 @@ const UserProvider = ({ children }) => {
     setSaldo(saldo + valorEmprestimo);
   };
 
-  return <UserContext.Provider value={{ user, saldo, realizarLogin, realizarEmprestimo }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ user, saldo, realizarLogin, realizarEmprestimo, realizarLogout }}>{children}</UserContext.Provider>;
 };
 
 export default UserProvider;
