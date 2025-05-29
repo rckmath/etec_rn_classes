@@ -11,7 +11,7 @@ const HomeScreen = () => {
   const chamarApiCotacao = async () => {
     try {
       const retornoCotacao = await getCotacao("bitcoin");
-      console.log(retornoCotacao);
+      console.log(retornoCotacao.data);
       setCotacaoAnterior(cotacao);
       setCotacao(retornoCotacao.data.bitcoin.brl);
     } catch (error) {
@@ -38,8 +38,8 @@ const HomeScreen = () => {
 
   return (
     <View style={{ flexGrow: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text style={{ fontSize: 24, color: "#AAAAAA" }}>BTC/BRL: R$ {cotacaoAnterior}</Text>
-      <Text style={{ fontSize: 40 }}>BTC/BRL: R$ {cotacao}</Text>
+      <Text style={{ fontSize: 18, color: "#7d7d7d" }}>BTC/BRL: R$ {cotacaoAnterior.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</Text>
+      <Text style={{ fontSize: 34 }}>BTC/BRL: R$ {cotacao.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</Text>
       <Button style={{ height: 40, marginTop: 10 }} labelStyle={{ fontSize: 20 }} mode="contained" onPress={chamarApiCotacao}>
         Atualizar cotação
       </Button>
