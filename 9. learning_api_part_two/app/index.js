@@ -1,50 +1,43 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useContext, useEffect } from "react";
 import { View, Text } from "react-native";
-import { Button } from "react-native-paper";
+import { TextInput, Button } from "react-native-paper";
 
-import { getCotacao } from "./_services/cotacao";
+import { AuthContext } from "./_context/AuthContext";
 
-const HomeScreen = () => {
-  const [cotacaoAnterior, setCotacaoAnterior] = useState(0);
-  const [cotacao, setCotacao] = useState(0);
+import { useNavigation } from "expo-router";
 
-  const chamarApiCotacao = async () => {
-    try {
-      const retornoCotacao = await getCotacao("bitcoin");
-      console.log(retornoCotacao.data);
-      setCotacaoAnterior(cotacao);
-      setCotacao(retornoCotacao.data.bitcoin.brl);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+const LoginScreen = () => {
+  const navigation = useNavigation();
 
-  const pollingRef = useRef(null);
+  const [codigo, setCodigo] = useState("");
+  const { acessar, autenticado } = useContext(AuthContext);
 
   useEffect(() => {
-    chamarApiCotacao();
-
-    const startPolling = () => {
-      pollingRef.current = setInterval(() => {
-        chamarApiCotacao();
-      }, 10000);
-    };
-    startPolling();
-
-    return () => {
-      clearInterval(pollingRef.current);
-    };
-  }, []);
+    if (autenticado) {
+      navigation.navigate("screens/home");
+    }
+  }, [autenticado]);
 
   return (
-    <View style={{ flexGrow: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text style={{ fontSize: 18, color: "#7d7d7d" }}>BTC/BRL: R$ {cotacaoAnterior.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</Text>
-      <Text style={{ fontSize: 34 }}>BTC/BRL: R$ {cotacao.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</Text>
-      <Button style={{ height: 40, marginTop: 10 }} labelStyle={{ fontSize: 20 }} mode="contained" onPress={chamarApiCotacao}>
-        Atualizar cotação
-      </Button>
+    <View style={{ flexGrow: 1, justifyContent: "center", alignItems: "center" }}>
+      <View style={{ width: "100%", padding: 20 }}>
+        <Text style={{ fontSize: 40 }}>Entre com o código</Text>
+        <Text style={{ fontSize: 20, color: "grey", marginTop: 30 }}>Código de acesso: {codigo}</Text>
+        <TextInput label="Código" style={{ maxHeight: 70 }} value={codigo} onChangeText={setCodigo} />
+        <Button
+          style={{ marginTop: 20 }}
+          labelStyle={{ fontSize: 20 }}
+          mode="outlined"
+          onPress={async () => {
+            await acessar(codigo);
+          }}
+          icon="arrow-right"
+        >
+          Acessar
+        </Button>
+      </View>
     </View>
   );
 };
 
-export default HomeScreen;
+export default LoginScreen;

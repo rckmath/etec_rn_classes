@@ -5,6 +5,8 @@ import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
+import { AuthProvider } from "./_context/AuthContext";
+
 SplashScreen.preventAutoHideAsync();
 
 export const theme = {
@@ -69,10 +71,13 @@ export default function RootLayout() {
   }
 
   return (
-    <PaperProvider theme={theme}>
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false, title: "CRIPTO" }} />
-      </Stack>
-    </PaperProvider>
+    <AuthProvider>
+      <PaperProvider theme={theme}>
+        <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="screens/home" options={{ headerShown: false }} />
+        </Stack>
+      </PaperProvider>
+    </AuthProvider>
   );
 }
